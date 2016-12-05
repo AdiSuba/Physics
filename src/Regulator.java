@@ -23,7 +23,7 @@ public class Regulator {
 		d.addObject(o3);
 		Enviroment e = new Enviroment();
 		e.addObject(o1, 5, 3);
-		e.addObject(o2, 2, 1);
+		e.addObject(o2, 3, 25);
 		e.addObject(o3, -0.5, 0.25);
 		f.add(d);
 		f.setSize(500, 500);

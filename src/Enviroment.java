@@ -1,6 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
@@ -19,7 +20,7 @@ public class Enviroment {
 		sizeX = 0; sizeY = 0; 
 	}
 	
-	//with Atributes
+	//with Attributes
 	public void addObject(Object shape, PhysicalAtributes atribute) {
 		numberOfShapes++;
 		shapes.put(numberOfShapes, shape);
@@ -50,39 +51,67 @@ public class Enviroment {
 		sizeX = x; sizeY = y;
 	}
 	
-	public boolean checkCollisionWithEdge(Object o) {
-		int x = o.getx();
-		int y = o.gety();
+	public boolean checkCollisionWithEdgeX(Object o, double vx, double vy) {
 		if(o instanceof Circle) {
-			int r = o.getRadius();
-			if(x <= 0 || y <= 0 || x + r >= sizeX || y + r >= sizeY) 
+			int[] distance = getDistanceFromEdge(o, vx, vy);
+			if(distance[0] < Math.abs(vx)) 
 				return true;
 		}
 		return false;
+	}
+	
+	public boolean checkCollisionWithEdgeY(Object o, double vx, double vy) {
+		if(o instanceof Circle) {
+			int[] distance = getDistanceFromEdge(o, vx, vy);
+			if(distance[1] < Math.abs(vy) ) 
+				return true;
+		}
+		return false;
+	}
+	
+	public int[] getDistanceFromEdge(Object o, double vx, double vy) {
+		//Returns closest distance to edge for x and y axes
+		int x = o.getx(), distanceX;
+		int y = o.gety(), distanceY, r = o.getRadius();
+		if(vx > 0) {
+			distanceX = sizeX - x - r;
+		}
+		else distanceX = x;
+		if(vy > 0) {
+			distanceY = sizeY - y - r;
+		}
+		else distanceY = y;
+		
+		int[] distance =  new int[]{distanceX, distanceY};
+		return distance;
 	}
 	
 	public void Simulate() {
 		Timer timer = new Timer(10,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-			System.out.println("timercount :"+timercount);
-            timercount++;
+			//System.out.println("timercount :"+timercount);
+            //timercount++;
             for(int i = 1; i <= numberOfShapes; i++) {
             	Object o = shapes.get(i);
             	PhysicalAtributes pa = atributes.get(i);
             	double x = o.getRealx(), y = o.getRealy();
             	double vx = pa.getHorizontalSpeed();
             	double vy = pa.getVerticalSpeed();
-            	o.setx(x + vx);
-            	if(checkCollisionWithEdge(o)) {
+            	int[] distance = getDistanceFromEdge(o, vx, vy);
+    			System.out.println("dx :"+ distance[0]);
+            	if(checkCollisionWithEdgeX(o, vx, vy)) {
             		pa.setHorizontalSpeed(-vx);
-            		o.setx(x - 2*vx);
+            		int dx = distance[0];
+            		o.setx(x - vx + dx);
             	}
-            	o.sety(y + vy);
-            	if(checkCollisionWithEdge(o)) {
+            	else o.setx(x + vx);
+            	if(checkCollisionWithEdgeY(o, vx, vy)) {
             		pa.setVerticalSpeed(-vy);
-            		o.sety(y - 2*vy);
+            		int dy = distance[1];
+            		o.sety(y - vy + dy);
             	}
+            	else o.sety(y + vy);
             }
             }
         });
