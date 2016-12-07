@@ -8,7 +8,7 @@ public class Circle extends Object{
 	int radius;
 	
 	public Circle(int X, int Y, int r) {
-		super(X, Y);
+		super(X, Y, 0);
 		radius = r;
 	}
 	
@@ -18,6 +18,10 @@ public class Circle extends Object{
 	
 	public int getRadius() {
 		return radius;
+	}
+	
+	public int[] getCenter() {
+		return new int[] {radius, radius};
 	}
 	
 	public void draw(Graphics2D g) {

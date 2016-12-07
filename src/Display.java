@@ -20,12 +20,29 @@ class Display extends JComponent {
 	public void removeObject(Object o) {
 		objects.remove(o);
 	}
-	public void paint(Graphics g) {
+	public void drawObject(Graphics2D g2d, Object o) {
+		int x0 = o.getx(), y0 = o.gety();
+		int xMid = o.getCentralDistance()[0];
+		int yMid = o.getCentralDistance()[1];
+		//g2d.rotate(o.getAngle());
+		g2d.rotate(o.getAngle(), x0 + xMid, y0 + yMid);
+		System.out.println("ang :"+ o.getAngle());
+		o.draw(g2d);
+		g2d.dispose();
+//		g2d.rotate(-2*o.getAngle(), x0 + xMid, y0 + yMid);
+//		System.out.println("ang2 :"+ o.getAngle());
+		//g2d.rotate(-o.getAngle());
+	}
+	
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.setBackground(Color.WHITE );
+		Graphics2D g2d= (Graphics2D)(g);
 		repaint();
 		for(Object o : objects) {
-			o.draw((Graphics2D)g);
+			g2d = (Graphics2D) g.create();
+			drawObject(g2d, o);
+			g2d.rotate(o.getAngle());
 		}
 //	g.setColor(Color.BLACK);
 //	g.fillRect(45, 50, 25, 25);

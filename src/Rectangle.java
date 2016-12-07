@@ -7,8 +7,8 @@ public class Rectangle extends Object{
 	//x2 and y2 represent the bottom left corner of the rectangle
 	int x2;
 	int y2;
-	public Rectangle(int X, int Y, int width, int height) {
-		super(X, Y);
+	public Rectangle(int X, int Y, double deg, int width, int height) {
+		super(X, Y, deg);
 		x2 = this.getx() + width;
 		y2 = this.gety() + height;
 	}
@@ -27,6 +27,10 @@ public class Rectangle extends Object{
 	
 	public int getHeight() {
 		return y2 - this.gety();
+	}
+	
+	public int[] getCenter() {
+		return new int[] {(x2 - this.getx())/2, (y2 - this.gety())};
 	}
 	
 	public void draw(Graphics2D g) {

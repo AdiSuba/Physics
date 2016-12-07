@@ -7,8 +7,13 @@ import java.util.HashMap;
 
 public class Enviroment {
 	Integer numberOfShapes;
+	//The following are properties of the box that surrounds the objects - boundaries
+	int startX;
+	int startY;
 	int sizeX;
 	int sizeY;
+	double angle;
+	//
 	HashMap<Integer, Object> shapes;
 	HashMap<Integer, PhysicalAtributes> atributes;
 	int timercount;
@@ -17,6 +22,8 @@ public class Enviroment {
 		numberOfShapes = 0;
 		shapes = new HashMap<Integer, Object>();
 		atributes = new HashMap<Integer, PhysicalAtributes>();
+		angle = 0;
+		startX = 0; startY = 0;
 		sizeX = 0; sizeY = 0; 
 	}
 	
@@ -30,6 +37,7 @@ public class Enviroment {
 	//with Speed
 	public void addObject(Object shape, double vx, double vy) {
 		numberOfShapes++;
+		shape.set(startX + shape.getRealx(),startY +shape.getRealy());
 		shapes.put(numberOfShapes, shape);
 		PhysicalAtributes atribute = new PhysicalAtributes(vx, vy);
 		atributes.put(numberOfShapes, atribute);
@@ -37,6 +45,7 @@ public class Enviroment {
 	
 	public void addObject(Object shape) {
 		numberOfShapes++;
+		shape.set(startX + shape.getRealx(),startY +shape.getRealy());
 		shapes.put(numberOfShapes, shape);
 		atributes.put(numberOfShapes, new PhysicalAtributes());
 	}
@@ -51,9 +60,23 @@ public class Enviroment {
 		sizeX = x; sizeY = y;
 	}
 	
+	public void setStartOfEnvironment(int x, int y) {
+		startX = x; startY = y;
+	}
+	
+	public void setBoundaries(int x0, int y0, int sizex, int sizey) {
+		startX = x0; startY = y0;
+		sizeX = sizex; sizeY = sizey;
+		
+	}
+	
+	public void setAngle(double angle) {
+		this.angle = Math.toRadians(angle);
+	}
+	
 	public boolean checkCollisionWithEdgeX(Object o, double vx, double vy) {
 		if(o instanceof Circle) {
-			int[] distance = getDistanceFromEdge(o, vx, vy);
+			double[] distance = getDistanceFromEdge(o, vx, vy);
 			if(distance[0] < Math.abs(vx)) 
 				return true;
 		}
@@ -62,27 +85,28 @@ public class Enviroment {
 	
 	public boolean checkCollisionWithEdgeY(Object o, double vx, double vy) {
 		if(o instanceof Circle) {
-			int[] distance = getDistanceFromEdge(o, vx, vy);
+			double[] distance = getDistanceFromEdge(o, vx, vy);
 			if(distance[1] < Math.abs(vy) ) 
 				return true;
 		}
 		return false;
 	}
 	
-	public int[] getDistanceFromEdge(Object o, double vx, double vy) {
+	public double[] getDistanceFromEdge(Object o, double vx, double vy) {
 		//Returns closest distance to edge for x and y axes
-		int x = o.getx(), distanceX;
-		int y = o.gety(), distanceY, r = o.getRadius();
+		int x = o.getx();
+		int y = o.gety(), r = o.getRadius();
+		double distanceX, distanceY;
 		if(vx > 0) {
-			distanceX = sizeX - x - r;
+			distanceX = (startX + sizeX - x - r)*(1 + Math.tan(angle)*(sizeY - y)/x);
 		}
-		else distanceX = x;
+		else distanceX = (x - startX)*(1 + Math.tan(angle)*(sizeY - y)/x);
 		if(vy > 0) {
-			distanceY = sizeY - y - r;
+			distanceY = (startY + sizeY - y - r)*(1 + Math.tan(angle)*x/y);
 		}
-		else distanceY = y;
+		else distanceY = (y - startY)*(1 + Math.tan(angle)*y/x);
 		
-		int[] distance =  new int[]{distanceX, distanceY};
+		double[] distance =  new double[]{distanceX, distanceY};
 		return distance;
 	}
 	
@@ -98,17 +122,16 @@ public class Enviroment {
             	double x = o.getRealx(), y = o.getRealy();
             	double vx = pa.getHorizontalSpeed();
             	double vy = pa.getVerticalSpeed();
-            	int[] distance = getDistanceFromEdge(o, vx, vy);
-    			System.out.println("dx :"+ distance[0]);
+            	double[] distance = getDistanceFromEdge(o, vx, vy);
             	if(checkCollisionWithEdgeX(o, vx, vy)) {
             		pa.setHorizontalSpeed(-vx);
-            		int dx = distance[0];
+            		int dx = (int)distance[0];
             		o.setx(x - vx + dx);
             	}
             	else o.setx(x + vx);
             	if(checkCollisionWithEdgeY(o, vx, vy)) {
             		pa.setVerticalSpeed(-vy);
-            		int dy = distance[1];
+            		int dy = (int)distance[1];
             		o.sety(y - vy + dy);
             	}
             	else o.sety(y + vy);

@@ -6,10 +6,18 @@ public class Object {
 	//bounding box - a rectangle that completely encloses an object
 	private double x;
 	private double y;
+	private double angle; //in radians, entered in degrees
 	
 	public Object(int X, int Y) {
 		x = X;
 		y = Y;
+		angle = 0;
+	}
+	
+	public Object(int X, int Y, double deg) {
+		x = X;
+		y = Y;
+		angle = Math.toRadians(deg);
 	}
 
 	public Object(Object object) {
@@ -25,6 +33,18 @@ public class Object {
 	public void set(double X, double Y) {
 		x = X;
 		y = Y;
+	}
+	
+	public void set(int X, int Y, double deg) {
+		x = X;
+		y = Y;
+		angle = Math.toRadians(deg);
+	}
+	
+	public void set(double X, double Y, double deg) {
+		x = X;
+		y = Y;
+		angle = deg;
 	}
 	
 	public void setx(double X) {
@@ -43,6 +63,10 @@ public class Object {
 		return (int)y;
 	}
 	
+	public double getAngle() {
+		return angle;
+	}
+	
 	public double getRealx() {
 		return x;
 	}
@@ -53,6 +77,16 @@ public class Object {
 	
 	public int getRadius() {
 		return 0;
+	}
+	
+	public void increase(double dx, double dy) {
+		x += dx;
+		y += dy;
+	}
+	
+	public int[] getCentralDistance() {
+		//distance from the midpoint of the smallest rectangle that surrounds the object and the edges of that rectangle
+		return new int[] {-1, -1};
 	}
 	
 	public void draw(Graphics2D o) {
