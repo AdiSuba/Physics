@@ -26,7 +26,6 @@ class Display extends JComponent {
 		int yMid = o.getCentralDistance()[1];
 		//g2d.rotate(o.getAngle());
 		g2d.rotate(o.getAngle(), x0 + xMid, y0 + yMid);
-		System.out.println("ang :"+ o.getAngle());
 		o.draw(g2d);
 		g2d.dispose();
 //		g2d.rotate(-2*o.getAngle(), x0 + xMid, y0 + yMid);

@@ -1,6 +1,6 @@
 import java.awt.Graphics2D;
 
-public class Object {
+public abstract class Object {
 	
 	//x and y coordinates represent the top left corner of the objects bounding box
 	//bounding box - a rectangle that completely encloses an object
@@ -84,10 +84,7 @@ public class Object {
 		y += dy;
 	}
 	
-	public int[] getCentralDistance() {
-		//distance from the midpoint of the smallest rectangle that surrounds the object and the edges of that rectangle
-		return new int[] {-1, -1};
-	}
+	public abstract int[] getCentralDistance();
 	
 	public void draw(Graphics2D o) {
 		

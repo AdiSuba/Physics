@@ -20,7 +20,7 @@ public class Circle extends Object{
 		return radius;
 	}
 	
-	public int[] getCenter() {
+	public int[] getCentralDistance() {
 		return new int[] {radius, radius};
 	}
 	

@@ -29,8 +29,8 @@ public class Rectangle extends Object{
 		return y2 - this.gety();
 	}
 	
-	public int[] getCenter() {
-		return new int[] {(x2 - this.getx())/2, (y2 - this.gety())};
+	public int[] getCentralDistance() {
+		return new int[] {(x2 - this.getx())/2, ((y2 - this.gety())/2)};
 	}
 	
 	public void draw(Graphics2D g) {

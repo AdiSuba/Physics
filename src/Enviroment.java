@@ -135,6 +135,7 @@ public class Enviroment {
             		o.sety(y - vy + dy);
             	}
             	else o.sety(y + vy);
+        		System.out.println("ang :"+ 1 + Math.tan(angle)*(sizeY - y)/x);
             }
             }
         });
