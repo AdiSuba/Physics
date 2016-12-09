@@ -55,6 +55,10 @@ public abstract class Object {
 		y = Y;
 	}
 	
+	public void setAngle(double angle) {
+		this.angle = angle;
+	}
+	
 	public int getx() {
 		return (int)x;
 	}

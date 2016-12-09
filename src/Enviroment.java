@@ -8,11 +8,7 @@ import java.util.HashMap;
 public class Enviroment {
 	Integer numberOfShapes;
 	//The following are properties of the box that surrounds the objects - boundaries
-	int startX;
-	int startY;
-	int sizeX;
-	int sizeY;
-	double angle;
+	Rectangle BoundingBox;
 	//
 	HashMap<Integer, Object> shapes;
 	HashMap<Integer, PhysicalAtributes> atributes;
@@ -22,9 +18,15 @@ public class Enviroment {
 		numberOfShapes = 0;
 		shapes = new HashMap<Integer, Object>();
 		atributes = new HashMap<Integer, PhysicalAtributes>();
-		angle = 0;
-		startX = 0; startY = 0;
-		sizeX = 0; sizeY = 0; 
+		BoundingBox = new Rectangle(0, 0, 0, 0, 0);
+	}
+	
+	public void setBoundingBox(Rectangle o) {
+		BoundingBox = o;
+	}
+	
+	public Rectangle getBoundingBox() {
+		return BoundingBox;
 	}
 	
 	//with Attributes
@@ -37,6 +39,8 @@ public class Enviroment {
 	//with Speed
 	public void addObject(Object shape, double vx, double vy) {
 		numberOfShapes++;
+		int startX = (int)BoundingBox.getx();
+		int startY = (int)BoundingBox.gety();
 		shape.set(startX + shape.getRealx(),startY +shape.getRealy());
 		shapes.put(numberOfShapes, shape);
 		PhysicalAtributes atribute = new PhysicalAtributes(vx, vy);
@@ -45,6 +49,8 @@ public class Enviroment {
 	
 	public void addObject(Object shape) {
 		numberOfShapes++;
+		int startX = (int)BoundingBox.getx();
+		int startY = (int)BoundingBox.gety();
 		shape.set(startX + shape.getRealx(),startY +shape.getRealy());
 		shapes.put(numberOfShapes, shape);
 		atributes.put(numberOfShapes, new PhysicalAtributes());
@@ -57,21 +63,24 @@ public class Enviroment {
 	}
 	
 	public void setSize(int x, int y) {
-		sizeX = x; sizeY = y;
+		BoundingBox.setWidth(x);
+		BoundingBox.setHeight(y);
 	}
 	
 	public void setStartOfEnvironment(int x, int y) {
-		startX = x; startY = y;
+		BoundingBox.set(x, y);
 	}
 	
 	public void setBoundaries(int x0, int y0, int sizex, int sizey) {
-		startX = x0; startY = y0;
-		sizeX = sizex; sizeY = sizey;
+		BoundingBox.set(x0, y0);
+		BoundingBox.setWidth(sizex);
+		BoundingBox.setHeight(sizey);
 		
 	}
 	
 	public void setAngle(double angle) {
-		this.angle = Math.toRadians(angle);
+		//Angle is set in degrees
+		BoundingBox.setAngle(Math.toRadians(angle));
 	}
 	
 	public boolean checkCollisionWithEdgeX(Object o, double vx, double vy) {
@@ -96,6 +105,12 @@ public class Enviroment {
 		//Returns closest distance to edge for x and y axes
 		int x = o.getx();
 		int y = o.gety(), r = o.getRadius();
+		int startX = (int)BoundingBox.getx();
+		int startY = (int)BoundingBox.gety();
+		double angle = BoundingBox.getAngle();
+		int sizeX = (int)BoundingBox.getWidth();
+		int sizeY = (int)BoundingBox.getHeight();
+		
 		double distanceX, distanceY;
 		if(vx > 0) {
 			distanceX = (startX + sizeX - x - r)*(1 + Math.tan(angle)*(sizeY - y)/x);
@@ -135,7 +150,6 @@ public class Enviroment {
             		o.sety(y - vy + dy);
             	}
             	else o.sety(y + vy);
-        		System.out.println("ang :"+ 1 + Math.tan(angle)*(sizeY - y)/x);
             }
             }
         });

@@ -14,9 +14,9 @@ public class Regulator {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Display d = new Display();
 		Circle o1 = new Circle(250, 250, 50);
-		Circle o2 = new Circle(280, 50, 25);
+		Circle o2 = new Circle(280, 50, 30);
 		Circle o3 = new Circle(50, 400, 25);
-		int x0 = 300, y0 = 300, sizeX = 500, sizeY = 500;
+		int x0 = 200, y0 = 200, sizeX = 500, sizeY = 500;
 		double angle = 15;
 		Rectangle rec1 = new Rectangle(x0, y0, 0, sizeX, sizeY);
 		d.addObject(rec1);
@@ -26,8 +26,7 @@ public class Regulator {
 		d.addObject(o2);
 		d.addObject(o3);
 		Enviroment e = new Enviroment();
-		e.setBoundaries(x0, y0, sizeX, sizeY);
-		e.setAngle(angle);
+		e.setBoundingBox(rec);
 		e.addObject(o1, 5, 3);
 		e.addObject(o2, 8, 25);
 		e.addObject(o3, -0.5, 0.25);
